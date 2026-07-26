@@ -45,7 +45,16 @@ public static class ServiceCollectionExtensions
                 httpClient: httpClient);
             builder.Plugins.AddFromType<TimePlugin>("Time");
             builder.Plugins.AddFromType<ConversationSummaryPlugin>("ConversationSummary");
-            return builder.Build();
+            
+            var kernel = builder.Build();
+            
+            var requestOperationsPluginPath = Path.Combine(
+                AppContext.BaseDirectory,
+                "Plugins",
+                "RequestOperationsPlugin");
+            kernel.ImportPluginFromPromptDirectory(requestOperationsPluginPath, "RequestOperations");
+            
+            return kernel;
         });
         
         // get IChatCompletionService from Kernel

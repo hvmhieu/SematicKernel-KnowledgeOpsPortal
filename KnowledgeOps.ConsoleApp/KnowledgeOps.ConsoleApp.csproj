@@ -25,4 +25,14 @@
       <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="Plugin\**\*.*" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\KnowledgeOps.AI\Plugins\**\*">
+      <Link>Plugins\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
