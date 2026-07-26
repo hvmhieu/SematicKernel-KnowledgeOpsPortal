@@ -17,6 +17,9 @@ public interface IKnowledgeOpsChatClient
         CancellationToken cancellationToken = default);
     
     Task<string> CreateOperationsBriefAysnc (string requestDetails, CancellationToken cancellationToken = default);
+    Task<string> GetBusinessRequestAsync(string requestId, CancellationToken cancellationToken = default);
+    Task<string> GetOpenBusinessRequestAsync(CancellationToken cancellationToken = default);
+    Task<string> CreateRequestBriefFromPluginAsync(string requestId, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -86,6 +89,46 @@ internal sealed class KnowledgeOpsChatClient(
             arguments,
             cancellationToken
         );
+        return result.ToString();
+    }
+
+    public async Task<string> GetBusinessRequestAsync(string requestId, CancellationToken cancellationToken = default)
+    {
+        var arguments = new KernelArguments
+        {
+            ["requestId"] = requestId
+        };
+        var result = await kernel.InvokeAsync(
+            pluginName: "BusinessRequests",
+            functionName: "get_request_by_id",
+            arguments: arguments,
+            cancellationToken: cancellationToken
+        );
+        return result.ToString();
+    }
+
+    public async Task<string> GetOpenBusinessRequestAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await kernel.InvokeAsync(
+            pluginName: "BusinessRequests",
+            functionName: "get_open_requests",
+            cancellationToken: cancellationToken);
+        
+        return result.ToString();
+    }
+
+    public async Task<string> CreateRequestBriefFromPluginAsync(string requestId, CancellationToken cancellationToken = default)
+    {
+        var arguments = new KernelArguments
+        {
+            ["requestId"] = requestId
+        };
+        
+        var result = await kernel.InvokePromptAsync(
+            promptTemplate: KnowledgeOpsPromptTemplates.RequestBriefFromPlugin,
+            arguments: arguments,
+            cancellationToken: cancellationToken);
+        
         return result.ToString();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System;
 using System.Net.Http;
+using DefaultNamespace;
 using Microsoft.SemanticKernel.Plugins.Core;
 
 namespace KnowledgeOps.AI;
@@ -45,7 +46,9 @@ public static class ServiceCollectionExtensions
                 httpClient: httpClient);
             builder.Plugins.AddFromType<TimePlugin>("Time");
             builder.Plugins.AddFromType<ConversationSummaryPlugin>("ConversationSummary");
+            builder.Plugins.AddFromType<BusinessRequestPlugin>("BusinessRequests");
             
+            builder.Services.AddSingleton<IBusinessRequestRepository, InMemoryBusinessRequestRepository>();
             var kernel = builder.Build();
             
             var requestOperationsPluginPath = Path.Combine(
