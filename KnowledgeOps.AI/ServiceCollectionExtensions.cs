@@ -7,6 +7,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using System;
 using System.Net.Http;
 using DefaultNamespace;
+using KnowledgeOps.Services;
 using Microsoft.SemanticKernel.Plugins.Core;
 
 namespace KnowledgeOps.AI;
